@@ -1,0 +1,37 @@
+{
+  "services": {
+    "name": "tax",
+    "version": "v1",
+    "style": "RPC"
+  },
+  "schemas": {
+    "addEntry": "./schemas/addEntrySchema"
+  },
+  "models": {
+    "taxModel": "./models/taxModel"
+  },
+  "hooks": {
+    "onError": "./operations/addEntry/hooks/onError"
+  },
+  "taxes": {
+    "defaultCode": "default",
+    "classes": {
+      "default": "./classes/default",
+      "ca-on-pm": "./classes/ca-on-pm"
+    }
+  },
+  "bus": {
+    "engines": {
+      "local": {
+        "handler": "./local"
+      }
+    },
+    "channels": {
+      "taxes": {
+        "name": "TAXES",
+        "engine": "local"
+      }
+    }
+  },
+  "aggregateItems": true
+}
