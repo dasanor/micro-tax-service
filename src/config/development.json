@@ -1,0 +1,17 @@
+{
+  "logger": {
+    "level": "debug"
+  },
+  "db": {
+    "host": "localhost",
+    "db": "micro",
+    "debug": true
+  },
+  "gateway": {
+    "gatewayUrlOverrride": "./config/gatewayUrlOverride"
+  },
+  "services": {
+    "port": "3001"
+  }
+}
+
