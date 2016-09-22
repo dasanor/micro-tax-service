@@ -4,7 +4,7 @@ const base = require('microbase')();
 require(base.config.get('models:taxModel'))(base);
 
 // Add operations
-base.services.add(require('./operations/createTax')(base));
-base.services.add(require('./operations/cartTaxes')(base));
+base.services.addOperation(require('./operations/createTax')(base));
+base.services.addOperation(require('./operations/cartTaxes')(base));
 
 module.exports = base;
