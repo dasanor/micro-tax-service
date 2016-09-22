@@ -82,7 +82,7 @@ describe('Taxes', () => {
         isPercentage: false
       }
     };
-    return callService(options)
+    callService(options)
       .then(response => {
         expect(response.statusCode).to.equal(200);
         // Expected result:
@@ -97,13 +97,13 @@ describe('Taxes', () => {
         //      id : "1"
         //   }
         // }
-          const result = response.result;
-          expect(result.ok).to.equal(true);
-          const tax = result.tax;
-          expect(tax.id).to.be.a.string();
-          expect(tax.code).to.be.a.string().and.to.equal('default-fixed');
-          expect(tax.title).to.be.a.string().and.to.equal('Tax 5');
-          done();
+        const result = response.result;
+        expect(result.ok).to.equal(true);
+        const tax = result.tax;
+        expect(tax.id).to.be.a.string();
+        expect(tax.code).to.be.a.string().and.to.equal('default-fixed');
+        expect(tax.title).to.be.a.string().and.to.equal('Tax 5');
+        done();
       })
       .catch((error) => done(error));
   });
