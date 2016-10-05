@@ -11,7 +11,7 @@
     "gatewayUrlOverrride": "./config/gatewayUrlOverride"
   },
   "services": {
-    "port": "3001"
+    "port": "3003"
   }
 }
 
