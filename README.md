@@ -5,8 +5,8 @@ ecosystem.
 
 # Features
 
-* Create new taxes
-* Calculate cart taxes
+* Net and gross calculations
+* Easily creation of custom taxes, based on Cart, Products and User data
 
 # Entities
 
