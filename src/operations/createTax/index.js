@@ -32,7 +32,7 @@ function opFactory(base) {
 
           return reply(base.utils.genericResponse({ tax: savedTax.toClient() }));
         })
-        .catch(error => reply(base.utils.genericErrorResponse(error)));
+        .catch(error => reply(base.utils.genericResponse(null, error)));
     }
   };
   return op;
