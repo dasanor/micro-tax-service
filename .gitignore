@@ -3,3 +3,4 @@ coverage.html
 docs/api/index.html
 docs/code
 .idea
+.queues

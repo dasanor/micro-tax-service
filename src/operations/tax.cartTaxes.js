@@ -53,7 +53,6 @@ function opFactory(base) {
   }
 
   const op = {
-    name: 'tax.cartTaxes',
     validator: {
       schema: require(base.config.get('schemas:cartTaxes')),
     },

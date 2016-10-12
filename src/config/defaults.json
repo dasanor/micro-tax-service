@@ -11,9 +11,6 @@
   "models": {
     "taxModel": "./models/taxModel"
   },
-  "hooks": {
-    "onError": "./operations/addEntry/hooks/onError"
-  },
   "taxes": {
     "defaultCode": "default",
     "classes": {
@@ -25,12 +22,16 @@
     "engines": {
       "local": {
         "handler": "./local"
+      },
+      "amqp": {
+        "handler": "./amqp",
+        "url": "amqp://bus"
       }
     },
     "channels": {
       "taxes": {
         "name": "TAXES",
-        "engine": "local"
+        "engine": "amqp"
       }
     }
   },
