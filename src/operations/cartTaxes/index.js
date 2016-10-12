@@ -54,7 +54,9 @@ function opFactory(base) {
 
   const op = {
     name: 'tax.cartTaxes',
-    schema: require(base.config.get('schemas:cartTaxes')),
+    validator: {
+      schema: require(base.config.get('schemas:cartTaxes')),
+    },
     handler: (cart, reply) => {
       // List unique product IDs
       const productIds = [...new Set(cart.items.reduce((list, item) => {
