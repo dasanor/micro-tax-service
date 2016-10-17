@@ -9,8 +9,9 @@
 function opFactory(base) {
   const taxesChannel = base.config.get('bus:channels:taxes:name');
   const op = {
-    name: 'tax.create',
-    // TODO: create the tax JsonSchema
+    validator: {
+      schema: require(base.config.get('schemas:createTax')),
+    },
     handler: (msg, reply) => {
       const tax = new base.db.models.Tax({
         code: msg.code,

@@ -5,13 +5,11 @@
     "style": "RPC"
   },
   "schemas": {
-    "addEntry": "./schemas/addEntrySchema"
+    "cartTaxes": "./schemas/cartTaxesSchema",
+    "createTax": "./schemas/createTaxSchema"
   },
   "models": {
     "taxModel": "./models/taxModel"
-  },
-  "hooks": {
-    "onError": "./operations/addEntry/hooks/onError"
   },
   "taxes": {
     "defaultCode": "default",
@@ -24,12 +22,16 @@
     "engines": {
       "local": {
         "handler": "./local"
+      },
+      "amqp": {
+        "handler": "./amqp",
+        "url": "amqp://bus"
       }
     },
     "channels": {
       "taxes": {
         "name": "TAXES",
-        "engine": "local"
+        "engine": "amqp"
       }
     }
   },

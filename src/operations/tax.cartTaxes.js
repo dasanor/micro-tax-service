@@ -28,7 +28,7 @@ function opFactory(base) {
 
   loadTaxes();
 
-  // Reload taxes on Taces change
+  // Reload taxes on Taxes change
   const taxesChannel = base.config.get('bus:channels:taxes:name');
   base.bus.subscribe(`${taxesChannel}.*`, (/* msg */) => {
     loadTaxes();
@@ -43,14 +43,19 @@ function opFactory(base) {
   });
 
   function calculateItemTaxes(taxContext, calculateItemTaxesFn) {
+    if(!taxes[taxContext.taxCode]){
+      throw base.utils.Error('tax_not_found', { taxCode: taxContext.taxCode });
+    }
+
     const taxClass = taxes[taxContext.taxCode].class;
     taxContext.taxData = taxes[taxContext.taxCode];
     return taxClasses[taxClass](taxContext, calculateItemTaxesFn);
   }
 
   const op = {
-    name: 'tax.cartTaxes',
-    // TODO: create the tax JsonSchema
+    validator: {
+      schema: require(base.config.get('schemas:cartTaxes')),
+    },
     handler: (cart, reply) => {
       // List unique product IDs
       const productIds = [...new Set(cart.items.reduce((list, item) => {
