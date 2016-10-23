@@ -3,6 +3,7 @@ const shortId = require('shortid');
 const Code = require('code');
 const Lab = require('lab');
 const nock = require('nock');
+const request = require('supertest-as-promised');
 
 // shortcuts
 const lab = exports.lab = Lab.script();
@@ -13,7 +14,7 @@ const it = lab.it;
 const expect = Code.expect;
 
 const base = require('../index.js');
-const server = base.services.server;
+const app = base.transports.http.app;
 
 const defaultHeaders = base.config.get('test:defaultHeaders');
 const normalStockStatus = 0;
@@ -64,7 +65,12 @@ function initDB(done) {
 function callService(options) {
   options.method = options.method || 'POST';
   options.headers = options.headers || defaultHeaders;
-  return server.inject(options);
+  const promise = request(app)[options.method.toLowerCase()](options.url);
+  Object.keys(options.headers).forEach(key => {
+    promise.set(key, options.headers[key]);
+  });
+  if (options.payload) promise.send(options.payload);
+  return promise;
 }
 
 // Helper to mock a product data get
@@ -176,7 +182,7 @@ function createCart(numEntries, cartEntryRequest, sequenceProducts) {
             quantity: 10,
             warehouseId: '001'
           };
-        cart = cartResponse.result.cart;
+        cart = cartResponse.body.cart;
 
         const allEntries = Array.from(new Array(numEntries), (a, i) => {
           const entry = {
@@ -197,7 +203,7 @@ function createCart(numEntries, cartEntryRequest, sequenceProducts) {
           payload: {items: allEntries}
         })
           .then(entryResponses => {
-            if (entryResponses.statusCode !== 200 || entryResponses.result.ok === false) {
+            if (entryResponses.statusCode !== 200 || entryResponses.body.ok === false) {
               throw entryResponses;
             }
             return entryResponses;
@@ -214,17 +220,17 @@ function createCart(numEntries, cartEntryRequest, sequenceProducts) {
             });
           })
           .then(response => {
-            if (response.statusCode !== 200 || response.result.ok === false) {
+            if (response.statusCode !== 200 || response.body.ok === false) {
               throw response;
             }
-            return response.result.cart;
+            return response.body.cart;
           })
           .catch(error => {
             console.error(error);
             return error;
           });
       }
-      return cartResponse.result.cart;
+      return cartResponse.body.cart;
     });
 }
 
@@ -265,7 +271,7 @@ describe('Taxes', () => {
         //      id : "1"
         //   }
         // }
-        const result = response.result;
+        const result = response.body;
         expect(result.ok).to.equal(true);
         const tax = result.tax;
         expect(tax.id).to.be.a.string();
@@ -307,7 +313,7 @@ describe('Taxes', () => {
         //     }]
         //   }
         // }
-        const result = response.result;
+        const result = response.body;
         expect(result.ok).to.equal(true);
         const cart = result.cart;
         expect(cart.cartId).to.be.a.string().and.to.equal(cartId);
@@ -350,7 +356,7 @@ describe('Taxes', () => {
         //     }]
         //   }
         // }
-        const result = response.result;
+        const result = response.body;
         expect(result.ok).to.equal(true);
         const cart = result.cart;
         expect(cart.cartId).to.be.a.string().and.to.equal(cartId);
@@ -393,7 +399,7 @@ describe('Taxes', () => {
         //     }]
         //   }
         // }
-        const result = response.result;
+        const result = response.body;
         expect(result.ok).to.equal(true);
         const cart = result.cart;
         expect(cart.cartId).to.be.a.string().and.to.equal(cartId);
@@ -440,7 +446,7 @@ describe('Taxes', () => {
         //     }]
         //   }
         // }
-        const result = response.result;
+        const result = response.body;
         expect(result.ok).to.equal(true);
         const cart = result.cart;
         expect(cart.cartId).to.be.a.string().and.to.equal(cartId);
