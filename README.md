@@ -26,13 +26,4 @@ isPercentage | The Tax rate is a percentaje or absolute | Boolean | yes | true
 
 # API
 
-The full API documentation can be accessed in the microbase web http://api.microbase.io
-and provide access to the Stocks and Reserves endpoints to create,
-modify and delete them:
-
-## Taxes
-
-Name | Description | Method | Endpoint
------|-------------|--------|---------
-tax:createTax | Creates a Tax | `POST` | `/services/catalog/v1/tax.createTax`
-tax:cartTaxes | Calculates the Cart taxes | `POST` | `/services/catalog/v1/tax.cartTaxes`
+The full API documentation can be accessed in the microbase web http://docs.microbase.io
