@@ -9,7 +9,6 @@
 function opFactory(base) {
   const taxesChannel = base.config.get('bus:channels:taxes:name');
   const op = {
-    name: 'tax.list',
     handler: (msg, reply) => {
 
       // Query

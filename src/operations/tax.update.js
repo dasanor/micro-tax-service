@@ -21,30 +21,45 @@ function opFactory(base) {
         .then(tax => {
           if (!tax) throw base.utils.Error('tax_not_found', id);
 
-          tax.code = msg.code || tax.code;
-          tax.class = msg.class || tax.class;
-          tax.title = msg.title || tax.title;
-          tax.rate = msg.rate || tax.rate;
+          base.services.call({
+            name: 'catalog:product.list'
+          }, {taxCode : tax.code})
+            .then(response => {
 
-          if(msg.isPercentage != undefined) {
-            tax.isPercentage = msg.isPercentage;
-          }
+              if(response && response.data && response.data.length > 0) {
+                throw base.utils.Error('tax_has_products_associated', {id});
+              }
 
-          return tax.save();
+              tax.code = msgd.code || tax.code;
+              tax.class = msg.class || tax.class;
+              tax.title = msg.title || tax.title;
+              tax.rate = msg.rate || tax.rate;
+
+              if(msg.isPercentage != undefined) {
+                tax.isPercentage = msg.isPercentage;
+              }
+
+              return tax.save();
+            })
+            .catch(error => {
+              reply(base.utils.genericResponse(null, error))
+            })
+            .then(savedTax => {
+              if (base.logger.isDebugEnabled()) base.logger.debug(`[tax] tax ${savedTax._id} updated`);
+
+              base.bus.publish(`${taxesChannel}.UPDATE`,
+                {
+                  new: savedTax.toObject({ virtuals: true }),
+                  data: msg
+                }
+              );
+
+              return reply(base.utils.genericResponse({ tax: savedTax.toClient() }));
+            })
         })
-        .then(savedTax => {
-          if (base.logger.isDebugEnabled()) base.logger.debug(`[tax] tax ${savedTax._id} updated`);
-
-          base.bus.publish(`${taxesChannel}.UPDATE`,
-            {
-              new: savedTax.toObject({ virtuals: true }),
-              data: msg
-            }
-          );
-
-          return reply(base.utils.genericResponse({ tax: savedTax.toClient() }));
-        })
-        .catch(error => reply(base.utils.genericResponse(null, error)));
+        .catch(error => {
+          reply(base.utils.genericResponse(null, error))
+        });
     }
   };
   return op;
