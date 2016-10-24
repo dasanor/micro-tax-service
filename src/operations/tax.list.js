@@ -10,7 +10,6 @@ function opFactory(base) {
   const taxesChannel = base.config.get('bus:channels:taxes:name');
   const op = {
     name: 'tax.list',
-    //schema: require(base.config.get('schemas:createTax')),
     handler: (msg, reply) => {
 
       // Query

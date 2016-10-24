@@ -41,6 +41,7 @@ Returns a Tax object:
             "taxDetail": "VAT 10%"
         }]
     }
+}
 ```
 
 # Errors
