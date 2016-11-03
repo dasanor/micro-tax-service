@@ -20,9 +20,9 @@ function opFactory(base) {
         .then(tax => {
           if (!tax) throw base.utils.Error('tax_not_found', id);
 
-          return Promise.all([tax, base.services.call({
+          return [tax, base.services.call({
             name: 'catalog:product.list'
-          }, {taxCode : tax.code})]);
+          }, {taxCode : tax.code})];
 
         })
         .then(data => {
