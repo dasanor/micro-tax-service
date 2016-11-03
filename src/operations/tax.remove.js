@@ -20,6 +20,19 @@ function opFactory(base) {
         .then(tax => {
           if (!tax) throw base.utils.Error('tax_not_found', id);
 
+          return Promise.all([tax, base.services.call({
+            name: 'catalog:product.list'
+          }, {taxCode : tax.code})]);
+
+        })
+        .then(data => {
+          let tax = data[0];
+          let productList = data[1];
+
+          if(productList && productList.data && productList.data.length > 0) {
+            throw base.utils.Error('tax_has_products_associated', {id});
+          }
+
           return tax.remove();
         })
         .then(tax => {

@@ -21,41 +21,39 @@ function opFactory(base) {
         .then(tax => {
           if (!tax) throw base.utils.Error('tax_not_found', id);
 
-          base.services.call({
+          return Promise.all([tax, base.services.call({
             name: 'catalog:product.list'
-          }, {taxCode : tax.code})
-            .then(response => {
+          }, {taxCode: tax.code})]);
+        })
+        .then(data => {
+          let tax = data[0];
+          let productList = data[1];
 
-              if(response && response.data && response.data.length > 0) {
-                throw base.utils.Error('tax_has_products_associated', {id});
-              }
+          if(productList && productList.data && productList.data.length > 0) {
+            throw base.utils.Error('tax_has_products_associated', {id});
+          }
 
-              tax.code = msgd.code || tax.code;
-              tax.class = msg.class || tax.class;
-              tax.title = msg.title || tax.title;
-              tax.rate = msg.rate || tax.rate;
+          tax.code = msg.code || tax.code;
+          tax.class = msg.class || tax.class;
+          tax.title = msg.title || tax.title;
+          tax.rate = msg.rate || tax.rate;
+          if(msg.isPercentage != undefined) {
+            tax.isPercentage = msg.isPercentage;
+          }
 
-              if(msg.isPercentage != undefined) {
-                tax.isPercentage = msg.isPercentage;
-              }
+          return tax.save();
+        })
+        .then(savedTax => {
+          if (base.logger.isDebugEnabled()) base.logger.debug(`[tax] tax ${savedTax._id} updated`);
 
-              return tax.save();
-            })
-            .catch(error => {
-              reply(base.utils.genericResponse(null, error))
-            })
-            .then(savedTax => {
-              if (base.logger.isDebugEnabled()) base.logger.debug(`[tax] tax ${savedTax._id} updated`);
+          base.bus.publish(`${taxesChannel}.UPDATE`,
+            {
+              new: savedTax.toObject({ virtuals: true }),
+              data: msg
+            }
+          );
 
-              base.bus.publish(`${taxesChannel}.UPDATE`,
-                {
-                  new: savedTax.toObject({ virtuals: true }),
-                  data: msg
-                }
-              );
-
-              return reply(base.utils.genericResponse({ tax: savedTax.toClient() }));
-            })
+          return reply(base.utils.genericResponse({ tax: savedTax.toClient() }));
         })
         .catch(error => {
           reply(base.utils.genericResponse(null, error))

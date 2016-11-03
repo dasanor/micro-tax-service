@@ -13,7 +13,8 @@ function opFactory(base) {
     validator: {
       schema: require(base.config.get('schemas:infoTax')),
     },
-    handler: (id, reply) => {
+    handler: ({id}, reply) => {
+      console.log(id);
       base.db.models.Tax
         .findOne({ _id: id })
         .exec()

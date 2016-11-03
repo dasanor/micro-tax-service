@@ -20,6 +20,8 @@ const defaultHeaders = base.config.get('test:defaultHeaders');
 const normalStockStatus = 0;
 const reserveStockForMinutes = base.config.get('reserveStockForMinutes');
 
+let initialTaxes = [];
+
 // Check the environment
 if (process.env.NODE_ENV !== 'test') {
   console.log('\n[test] THIS ENVIRONMENT IS NOT FOR TEST!\n');
@@ -151,7 +153,7 @@ function createTaxes() {
       isPercentage: true
     }
   })
-    .then(() => {
+    .then(response => {
       return callService({
         url: '/services/tax/v1/tax.create',
         payload: {
@@ -163,10 +165,28 @@ function createTaxes() {
         }
       });
     })
-    .then(() => {
+    .then(response => {
+      return callService({
+        url: '/services/tax/v1/tax.create',
+        payload: {
+          code: 'default-test',
+          class: 'default',
+          title: 'Tax 10',
+          rate: 10,
+          isPercentage: false
+        }
+      });
+    })
+    .then(response => {
       const taxesChannel = base.config.get('bus:channels:taxes:name');
       base.bus.publish(`${taxesChannel}.CREATE`, {});
     })
+}
+
+function getTax(taxCode){
+  return callService({
+    url: `/services/tax/v1/tax.list?code=${taxCode}`
+  })
 }
 
 // Helper to create carts
@@ -282,6 +302,150 @@ describe('Taxes', () => {
       .catch((error) => done(error));
   });
 
+  it('list tax', done => {
+    const options = {
+      url: '/services/tax/v1/tax.list'
+    };
+    callService(options)
+      .then(response => {
+        expect(response.statusCode).to.equal(200);
+        const result = response.body;
+        expect(result.ok).to.equal(true);
+        expect(result.data.length).to.equal(3);
+        expect(result.data[0].code).to.equal('default-percentage');
+        expect(result.data[1].code).to.equal('default-fixed');
+        expect(result.data[2].code).to.equal('default-test');
+
+        done();
+      })
+      .catch((error) => done(error));
+  });
+
+  it('tax info', done => {
+    getTax('default-percentage')
+      .then(response =>{
+        const options = {
+          url: '/services/tax/v1/tax.info',
+          payload : {
+            id: response.body.data[0].id
+          }
+        };
+
+        return callService(options);
+      })
+      .then(response => {
+        expect(response.statusCode).to.equal(200);
+        const result = response.body;
+        expect(result.ok).to.equal(true);
+        expect(result.tax.code).to.equal('default-percentage');
+
+        done();
+      })
+      .catch((error) => done(error));
+  });
+
+  it('tax info not found', done => {
+    const options = {
+      url: '/services/tax/v1/tax.info',
+      payload : {
+        id: '1'
+      }
+    };
+    callService(options)
+      .then(response => {
+        expect(response.statusCode).to.equal(200);
+        const result = response.body;
+        expect(result.ok).to.equal(false);
+        expect(result.error).to.equal('tax_not_found');
+
+        done();
+      })
+      .catch((error) => done(error));
+  });
+
+  it('update tax', done => {
+    getTax('default-test')
+      .then(response => {
+        const options = {
+          url: '/services/tax/v1/tax.update',
+          payload: {
+            id: response.body.data[0].id,
+            code: 'default-test-updated'
+          }
+        };
+        return callService(options)
+      })
+      .then(response => {
+        expect(response.statusCode).to.equal(200);
+        const result = response.body;
+        expect(result.ok).to.equal(true);
+        expect(result.tax.code).to.equal('default-test-updated');
+
+        done();
+      })
+      .catch((error) => done(error));
+  });
+
+  it('update tax not found', done => {
+    const options = {
+      url: '/services/tax/v1/tax.update',
+      payload : {
+        id: '1',
+        code : 'default-test-updated'
+      }
+    };
+    callService(options)
+      .then(response => {
+        expect(response.statusCode).to.equal(200);
+        const result = response.body;
+        expect(result.ok).to.equal(false);
+        expect(result.error).to.equal('tax_not_found');
+
+        done();
+      })
+      .catch((error) => done(error));
+  });
+
+  it('remove tax', done => {
+    getTax('default-test')
+      .then( response => {
+      const options = {
+        url: '/services/tax/v1/tax.remove',
+        payload: {
+          id: response.body.data[0].id
+        }
+      };
+      return callService(options)
+    })
+      .then(response => {
+        expect(response.statusCode).to.equal(200);
+        const result = response.body;
+        expect(result.ok).to.equal(true);
+
+        done();
+      })
+      .catch((error) => done(error));
+  });
+
+  it('remove tax not found', done => {
+    const options = {
+      url: '/services/tax/v1/tax.remove',
+      payload : {
+        id: '1'
+      }
+    };
+    callService(options)
+      .then(response => {
+        expect(response.statusCode).to.equal(200);
+        const result = response.body;
+        expect(result.ok).to.equal(false);
+        expect(result.error).to.equal('tax_not_found');
+
+        done();
+      })
+      .catch((error) => done(error));
+  });
+
   it('calculates gross percentage tax', done => {
     const cartId = 'xxxx';
     const entryRequest = {id: '1', productId: '0001', quantity: 2, price: 100};
@@ -314,6 +478,7 @@ describe('Taxes', () => {
         //   }
         // }
         const result = response.body;
+        console.log(result);
         expect(result.ok).to.equal(true);
         const cart = result.cart;
         expect(cart.cartId).to.be.a.string().and.to.equal(cartId);
