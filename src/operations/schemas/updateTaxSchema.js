@@ -13,8 +13,11 @@ module.exports = {
     title: {
       type: 'string'
     },
+    description: {
+      type: 'string'
+    },
     rate: {
-      type: 'integer'
+      type: 'number'
     },
     isPercentage: {
       type: 'boolean'

@@ -1,4 +1,4 @@
-# tax.update
+# tax.remove
 
 This method is used to remove an existent Tax.
 
@@ -29,6 +29,7 @@ Expected errors that this method could return. Some errors return additional dat
 Error | Data | Description
 ------|------|------------
 tax_not_found | The data causing the error | Tax to update not found
+tax_has_products_associated | The data causing the error | Tax to update has products associated
 validation_error | The data causing the error | Some validation error
 
 # Example

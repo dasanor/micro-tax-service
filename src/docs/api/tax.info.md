@@ -1,4 +1,4 @@
-# tax.update
+# tax.info
 
 This method is used to retrieve the information of an existent Tax.
 

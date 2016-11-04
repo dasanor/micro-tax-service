@@ -27,8 +27,6 @@ function opFactory(base) {
   const selectableFields = base.db.models.Tax.selectableFields;
   const defaultFields = selectableFields.join(' ');
   const allowedProperties = Object.keys(filterExpressions);
-  const defaultLimit = 10;
-  const maxLimit = 100;
 
   const op = {
     handler: (params, reply) => {
@@ -41,11 +39,6 @@ function opFactory(base) {
           result[field] = filterExpressions[k](params[k]);
           return result;
         }, {});
-
-      // Pagination
-      let limit = +params.limit || defaultLimit;
-      if (limit > maxLimit) limit = maxLimit;
-      const skip = +params.skip || 0;
 
       // Fields
       let fields;
@@ -62,9 +55,7 @@ function opFactory(base) {
 
       // Query
       const query = base.db.models.Tax
-        .find(filters, fields)
-        .skip(skip)
-        .limit(limit);
+        .find(filters, fields);
 
       // Exec the query
       query.exec()

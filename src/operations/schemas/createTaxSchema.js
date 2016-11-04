@@ -10,8 +10,11 @@ module.exports = {
     title: {
       type: 'string'
     },
+    description: {
+      type: 'string'
+    },
     rate: {
-      type: 'integer'
+      type: 'number'
     },
     isPercentage: {
       type: 'boolean'
@@ -20,6 +23,7 @@ module.exports = {
   required: [
     'code',
     'class',
+    'title',
     'rate',
     'isPercentage'
   ],

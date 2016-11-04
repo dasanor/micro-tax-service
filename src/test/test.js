@@ -478,7 +478,6 @@ describe('Taxes', () => {
         //   }
         // }
         const result = response.body;
-        console.log(result);
         expect(result.ok).to.equal(true);
         const cart = result.cart;
         expect(cart.cartId).to.be.a.string().and.to.equal(cartId);

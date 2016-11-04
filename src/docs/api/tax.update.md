@@ -9,11 +9,12 @@ follows the [MicroBase API calling conventions](../calling-conventions.html).
 
 Argument | Required | Type | Example | Description
 ---------|----------|------|---------|------------
-token        | yes  | Token    | Bearer xxxxx... | Authentication token.
+token        | yes  | Token   | Bearer xxxxx... | Authentication token.
 id           | yes  | String  | rJGOMDf         | Tax database identifier.
 code         | no   | String  | default         | Code to be used as a reference in the Product.
 class        | no   | String  | default         | Identifier to the implementation code (i.e.: default.js).
 title        | no   | String  | VAT 10%         | Tax description.
+description  | no   | String  | Description     | Tax description.
 rate         | no   | Number  | 10              | Number to be used in the calculations (i.e.: 10%).
 isPercentage | no   | Boolean | false           | Is the tax a percentage or a fixed amount? Defaults to true.
 
@@ -42,6 +43,7 @@ Expected errors that this method could return. Some errors return additional dat
 Error | Data | Description
 ------|------|------------
 tax_not_found | The data causing the error | Tax to update not found
+tax_has_products_associated | The data causing the error | Tax to update has products associated
 validation_error | The data causing the error | Some validation error
 
 # Example

@@ -12,7 +12,8 @@ Argument | Required | Type | Example | Description
 token        | yes | Token    | Bearer xxxxx... | Authentication token.
 code         | yes  | String  | default         | Identifier to be used as a reference in the Product.
 class        | yes  | String  | default         | Identifier to the implementation code (i.e.: default.js).
-title        | yes  | String  | VAT 10%         | Tax description.
+title        | yes  | String  | VAT 10%         | Tax title.
+description  | no   | String  | Description     | Tax description.
 rate         | yes  | Number  | 10              | Number to be used in the calculations (i.e.: 10%).
 isPercentage | no   | Boolean | false           | Is the tax a percentage or a fixed amount? Defaults to true.
 

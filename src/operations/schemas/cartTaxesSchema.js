@@ -16,7 +16,7 @@ module.exports = {
             type: 'string'
           },
           quantity: {
-            type: 'integer'
+            type: 'number'
           },
           price: {
             type: 'number'
