@@ -25,10 +25,7 @@ function opFactory(base) {
           }, {taxCode : tax.code})];
 
         })
-        .then(data => {
-          let tax = data[0];
-          let productList = data[1];
-
+        .then(([tax, productList]) => {
           if(productList && productList.data && productList.data.length > 0) {
             throw base.utils.Error('tax_has_products_associated', {id});
           }
