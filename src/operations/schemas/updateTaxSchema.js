@@ -1,6 +1,9 @@
 module.exports = {
   type: 'object',
   properties: {
+    id: {
+      type: 'string'
+    },
     code: {
       type: 'string'
     },
@@ -21,11 +24,7 @@ module.exports = {
     }
   },
   required: [
-    'code',
-    'class',
-    'title',
-    'rate',
-    'isPercentage'
+    'id'
   ],
   additionalProperties: true
 };

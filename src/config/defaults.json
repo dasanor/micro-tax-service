@@ -6,7 +6,10 @@
   },
   "schemas": {
     "cartTaxes": "./schemas/cartTaxesSchema",
-    "createTax": "./schemas/createTaxSchema"
+    "infoTax": "./schemas/infoTaxSchema",
+    "createTax": "./schemas/createTaxSchema",
+    "updateTax": "./schemas/updateTaxSchema",
+    "removeTax": "./schemas/removeTaxSchema"
   },
   "models": {
     "taxModel": "./models/taxModel"

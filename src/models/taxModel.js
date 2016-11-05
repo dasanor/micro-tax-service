@@ -35,8 +35,20 @@ function modelFactory(base) {
   // Add the indexes
   schema.index({ code: 1 }, { unique: true });
 
+  const model = base.db.model('Tax', schema);
+
+  model.selectableFields = [
+    'id',
+    'code',
+    'class',
+    'title',
+    'description',
+    'rate',
+    'isPercentage'
+  ];
+
   // Add the model to mongoose
-  return base.db.model('Tax', schema);
+  return model;
 }
 
 module.exports = modelFactory;
