@@ -98,9 +98,12 @@ function opFactory(base) {
               },
               calculateItemTaxes
             );
-            item.beforeTax = beforeTax;
-            item.tax = tax;
-            item.taxDetail = taxDetail;
+            item.taxes = item.taxes || [];
+            item.taxes.push({
+              beforeTax,
+              tax,
+              taxDetail
+            });
           });
           reply(base.utils.genericResponse({ cart }));
         })
