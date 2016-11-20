@@ -451,9 +451,14 @@ describe('Taxes', () => {
     const entryRequest = {id: '1', productId: '0001', quantity: 2, price: 100};
     createCart()
       .then(() => {
+        const item = {
+          id: entryRequest.id,
+          productId: entryRequest.productId,
+          price: entryRequest.quantity * entryRequest.price
+        };
         const options = {
           url: `/services/tax/v1/tax.cartTaxes?cartId=${cartId}`,
-          payload: {items: [entryRequest]}
+          payload: { items: [item] }
         };
         mockProductTaxDataGet({productId: entryRequest.productId});
         return callService(options);
@@ -481,9 +486,9 @@ describe('Taxes', () => {
         expect(result.ok).to.equal(true);
         const cart = result.cart;
         expect(cart.cartId).to.be.a.string().and.to.equal(cartId);
-        expect(cart.items[0].beforeTax).to.be.a.number().and.to.equal(200);
-        expect(cart.items[0].tax).to.be.a.number().and.to.equal(42);
-        expect(cart.items[0].taxDetail).to.be.a.string().and.to.equal('Tax 21%');
+        expect(cart.items[0].taxes[0].beforeTax).to.be.a.number().and.to.equal(200);
+        expect(cart.items[0].taxes[0].tax).to.be.a.number().and.to.equal(42);
+        expect(cart.items[0].taxes[0].taxDetail).to.be.a.string().and.to.equal('Tax 21%');
         done();
       })
       .catch((error) => done(error));
@@ -494,9 +499,14 @@ describe('Taxes', () => {
     const entryRequest = {id: '1', productId: '0001', quantity: 2, price: 100};
     createCart()
       .then(() => {
+        const item = {
+          id: entryRequest.id,
+          productId: entryRequest.productId,
+          price: entryRequest.quantity * entryRequest.price
+        };
         const options = {
           url: `/services/tax/v1/tax.cartTaxes?cartId=${cartId}`,
-          payload: {items: [entryRequest]}
+          payload: { items: [item] }
         };
         mockProductTaxDataGet({productId: entryRequest.productId, isNetPrice: true});
         return callService(options);
@@ -524,9 +534,9 @@ describe('Taxes', () => {
         expect(result.ok).to.equal(true);
         const cart = result.cart;
         expect(cart.cartId).to.be.a.string().and.to.equal(cartId);
-        expect(cart.items[0].beforeTax).to.be.a.number().and.to.equal(158);
-        expect(cart.items[0].tax).to.be.a.number().and.to.equal(42);
-        expect(cart.items[0].taxDetail).to.be.a.string().and.to.equal('Tax 21%');
+        expect(cart.items[0].taxes[0].beforeTax).to.be.a.number().and.to.equal(158);
+        expect(cart.items[0].taxes[0].tax).to.be.a.number().and.to.equal(42);
+        expect(cart.items[0].taxes[0].taxDetail).to.be.a.string().and.to.equal('Tax 21%');
         done();
       })
       .catch((error) => done(error));
@@ -537,9 +547,14 @@ describe('Taxes', () => {
     const entryRequest = {id: '1', productId: '0001', quantity: 2, price: 100};
     createCart()
       .then(() => {
+        const item = {
+          id: entryRequest.id,
+          productId: entryRequest.productId,
+          price: entryRequest.quantity * entryRequest.price
+        };
         const options = {
           url: `/services/tax/v1/tax.cartTaxes?cartId=${cartId}`,
-          payload: {items: [entryRequest]}
+          payload: { items: [item] }
         };
         mockProductTaxDataGet({productId: entryRequest.productId, taxCode: 'default-fixed'});
         return callService(options);
@@ -567,9 +582,9 @@ describe('Taxes', () => {
         expect(result.ok).to.equal(true);
         const cart = result.cart;
         expect(cart.cartId).to.be.a.string().and.to.equal(cartId);
-        expect(cart.items[0].beforeTax).to.be.a.number().and.to.equal(200);
-        expect(cart.items[0].tax).to.be.a.number().and.to.equal(10);
-        expect(cart.items[0].taxDetail).to.be.a.string().and.to.equal('Tax 5');
+        expect(cart.items[0].taxes[0].beforeTax).to.be.a.number().and.to.equal(200);
+        expect(cart.items[0].taxes[0].tax).to.be.a.number().and.to.equal(10);
+        expect(cart.items[0].taxes[0].taxDetail).to.be.a.string().and.to.equal('Tax 5');
         done();
       })
       .catch((error) => done(error));
@@ -580,9 +595,14 @@ describe('Taxes', () => {
     const entryRequest = {id: '1', productId: '0001', quantity: 2, price: 100};
     createCart()
       .then(() => {
+        const item = {
+          id: entryRequest.id,
+          productId: entryRequest.productId,
+          price: entryRequest.quantity * entryRequest.price
+        };
         const options = {
           url: `/services/tax/v1/tax.cartTaxes?cartId=${cartId}`,
-          payload: {items: [entryRequest]}
+          payload: { items: [item] }
         };
         mockProductTaxDataGet({
           productId: entryRequest.productId,
@@ -614,9 +634,9 @@ describe('Taxes', () => {
         expect(result.ok).to.equal(true);
         const cart = result.cart;
         expect(cart.cartId).to.be.a.string().and.to.equal(cartId);
-        expect(cart.items[0].beforeTax).to.be.a.number().and.to.equal(190);
-        expect(cart.items[0].tax).to.be.a.number().and.to.equal(10);
-        expect(cart.items[0].taxDetail).to.be.a.string().and.to.equal('Tax 5');
+        expect(cart.items[0].taxes[0].beforeTax).to.be.a.number().and.to.equal(190);
+        expect(cart.items[0].taxes[0].tax).to.be.a.number().and.to.equal(10);
+        expect(cart.items[0].taxes[0].taxDetail).to.be.a.string().and.to.equal('Tax 5');
         done();
       })
       .catch((error) => done(error));

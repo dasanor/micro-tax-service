@@ -15,9 +15,6 @@ module.exports = {
           productId: {
             type: 'string'
           },
-          quantity: {
-            type: 'number'
-          },
           price: {
             type: 'number'
           }
@@ -25,7 +22,6 @@ module.exports = {
         required: [
           'id',
           'productId',
-          'quantity',
           'price'
         ],
         additionalProperties: true
