@@ -67,18 +67,22 @@ function opFactory(base) {
         .resolve(productIds)
         .then(() => {
           // Preload products
-          return base.services.call({
-            name: 'catalog:product.list'
-          }, {
-            id: productIds.join(','),
-            fields: 'taxCode,categories,isNetPrice'
-          })
-            .then(productsList => {
-              return productsList.data.reduce((result, item) => {
-                result[item.id] = item;
-                return result;
-              }, {});
-            });
+          return base.services
+            .call({
+              name: 'catalog:product.list'
+            }, {
+              id: productIds.join(','),
+              fields: 'taxCode,categories,isNetPrice'
+            })
+        })
+        .then(response => {
+          if (response.ok === false) {
+            throw new Error(response.error);
+          }
+          return response.data.reduce((result, item) => {
+            result[item.id] = item;
+            return result;
+          }, {});
         })
         .then(products => {
           // Calculate each line taxes
