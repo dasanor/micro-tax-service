@@ -10,7 +10,7 @@ follows the [MicroBase API calling conventions](../calling-conventions.html).
 Argument | Required | Type | Example | Description
 ---------|----------|------|---------|------------
 token  | yes | Token       | Bearer xxxxx... | Authentication token.
-cartId | yes | String      | default         | Identifier to be used as a reference in the Product.
+cartId | yes | String      | default         | Identifier to be used as a reference.
 items  | yes | Object List | -               | The list of entries in the Cart.
 
 ## Items
@@ -19,8 +19,8 @@ Argument | Required | Type | Example | Description
 ---------|----------|------|---------|------------
 id        | yes | String | HyR1hMmc   | Entry id.
 productId | yes | String | By2ZWfAPnV | The Product Id.
-quantity  | yes | Number | 1          | The quantity of product in the entry.
-price     | yes | Number | 100.00     | The Product price.
+quantity  | No  | Number | 1          | The quantity of product in the entry.
+price     | yes | Number | 100.00     | The total price of this item (Not the Product price).
 
 # Response
 
@@ -36,9 +36,13 @@ Returns a Tax object:
             "productId": "By2ZWfAPnV",
             "quantity": 1,
             "price": 100.00,
-            "beforeTax": 100.00,
-            "tax": 1.00,
-            "taxDetail": "VAT 10%"
+            "taxes": [
+              {
+                "beforeTax": 100,
+                "tax": 7,
+                "taxDetail": "VAT 7%"
+              }
+            ]
         }]
     }
 }
