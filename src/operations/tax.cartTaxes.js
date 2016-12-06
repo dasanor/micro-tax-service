@@ -35,11 +35,11 @@ function opFactory(base) {
   });
 
   // Preload tax classes (code)
-  const taxClassesLocations = base.config.get('taxes:classes');
   const defaultTaxCode = base.config.get('taxes:defaultCode');
   const taxClasses = {};
-  Object.keys(taxClassesLocations).forEach(key => {
-    taxClasses[key] = base.utils.loadModule(`taxes:classes:${key}`);
+  base.utils.loadModulesFromKey('taxes:classes').forEach(taxClass => {
+    const taxName = taxClass.keys[taxClass.keys.length - 1];
+    taxClasses[taxName] = taxClass.module;
   });
 
   function calculateItemTaxes(taxContext, calculateItemTaxesFn) {
