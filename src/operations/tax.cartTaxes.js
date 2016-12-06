@@ -77,7 +77,7 @@ function opFactory(base) {
         })
         .then(response => {
           if (response.ok === false) {
-            throw new Error(response.error);
+            throw base.utils.Error(response.error, response.data, true);
           }
           return response.data.reduce((result, item) => {
             result[item.id] = item;
