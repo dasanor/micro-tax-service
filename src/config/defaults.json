@@ -12,7 +12,7 @@
     "removeTax": "./schemas/removeTaxSchema"
   },
   "models": {
-    "taxModel": "./models/taxModel"
+    "Tax": "./models/taxModel"
   },
   "taxes": {
     "defaultCode": "default",

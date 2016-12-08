@@ -1,7 +1,9 @@
 const shortId = require('shortid');
 
-function modelFactory(base) {
-  if (base.logger.isDebugEnabled()) base.logger.debug('[db] registering model Tax');
+function modelFactory(base, configKeys) {
+  const modelName = configKeys[configKeys.length - 1];
+  if (base.logger.isDebugEnabled()) base.logger.debug(`[db] registering model '${modelName}'`);
+
   // The root schema
   const schema = base.db.Schema({
     _id: {
@@ -35,7 +37,7 @@ function modelFactory(base) {
   // Add the indexes
   schema.index({ code: 1 }, { unique: true });
 
-  const model = base.db.model('Tax', schema);
+  const model = base.db.model(modelName, schema);
 
   model.selectableFields = [
     'id',
