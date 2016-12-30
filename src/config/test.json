@@ -16,6 +16,14 @@
       "response": "debug"
     }
   },
+  "bus": {
+    "channels": {
+      "taxes": {
+        "name": "TAXES",
+        "engine": "local"
+      }
+    }
+  },
   "db": {
     "host": "mongo",
     "db": "micro-test",
