@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+  - '6'
+services:
+  - mongodb
+  - docker
+cache:
+  - yarn
+before_install:
+  - cd src
+  - npm install -g yarn
+install:
+  - yarn
+before_script:
+  - sleep 15
+script:
+- npm test
+- npm run test-cov-lcov
+after_success:
+  - cat ./lcov.info | ./node_modules/.bin/coveralls
+  - cd ..
+  - docker build -t $TRAVIS_REPO_SLUG:latest .
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  - docker push $TRAVIS_REPO_SLUG:latest;
+notifications:
+  slack:
+    secure: x8nq75Ly+ONrZ4x2zFZuQCYD99oJeQz5MTzcFxR9wzc3rpWZ/bJYjP9EZCXM2WRiieMj1gkJ+dQpx5T0CUZkBffgymIozhowJiBmhs3v5Ox/rSLJ9JmLADBTzwbyw4rJd0xAN/1Texx30uAOUmAk2Ov2Wd0MTAnSPktslgEOSDB4Eu3VQba0L0W9VKA4RA34pNHKkwEBP1fGWco6uW0ndHc/WRL3B2HnzMt6CVl4xQyTfUNmyU0ff74vhMLUvcUSxbyocU+PVp904Zs6EVMp852b1K+0nLGdHsTFeYjK5Q+PezWu8g6Fu/2r+wOwJK1p3JKUMxRchpTFxCexUyfxtN0jXNcQrGxkDw+b0j9wiIx7UPfaJ6wpLYRPrH6VQr3I3PSC3EOJpXAbPHfCtQ4k5LynqxLtsTK4/FDCNZGK8BPMAfTYuNY6BrOQMK0eBi01JUIb5qnQ4TZfrhcIArcri/U6YZTzv1AKb1v6V4TxyRBGGiqeAk3FkMXGLH9O6RYLVpz96fqqZN3bKrDqv1qs4iSvUNWrbknIN9ehCMEKCpMEL7UEyLD4b4Ao76uCypL2zcaGdhADFfqvuAs9OdQAz4Ptb/TEq9mrNxMhb4r7I8H8rdXhnP7oNQR0gsHqjigN7K4aQARTjxSGVIsE7EfvoB/0XtkR2udF7fNln+NRY6c=
