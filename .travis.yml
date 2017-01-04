@@ -1,21 +1,30 @@
+sudo: required
 language: node_js
 node_js:
   - '6'
+branches:
+  only:
+  - master
+  - develop
 services:
   - mongodb
   - docker
 cache:
-  - yarn
+  directories:
+  - $HOME/.yarn-cache
 before_install:
-  - cd src
-  - npm install -g yarn
+  # Repo for Yarn
+  - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
+  - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+  - sudo apt-get update -qq
+  - sudo apt-get install -y -qq yarn
 install:
-  - yarn
+  - cd src
+  - yarn --pure-lockfile
 before_script:
   - sleep 15
 script:
-- npm test
-- npm run test-cov-lcov
+  - npm run test-cov-lcov
 after_success:
   - cat ./lcov.info | ./node_modules/.bin/coveralls
   - cd ..
