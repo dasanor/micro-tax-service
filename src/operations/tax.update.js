@@ -8,6 +8,7 @@
  */
 function opFactory(base) {
   const taxesChannel = base.config.get('bus:channels:taxes:name');
+  const productListURI = base.config.get('services:uris:product.list');
   const op = {
     validator: {
       schema: require(base.config.get('schemas:updateTax')),
@@ -22,7 +23,7 @@ function opFactory(base) {
           if (!tax) throw base.utils.Error('tax_not_found', id);
 
           return [tax, base.services.call({
-            name: 'catalog:product.list'
+            name: productListURI
           }, {taxCode: tax.code})];
         })
         .then(([tax, productList]) => {

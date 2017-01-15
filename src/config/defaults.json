@@ -2,7 +2,10 @@
   "services": {
     "name": "tax",
     "version": "v1",
-    "style": "RPC"
+    "style": "RPC",
+    "uris": {
+      "product.list": "catalog:product.list"
+    }
   },
   "schemas": {
     "cartTaxes": "./schemas/cartTaxesSchema",
