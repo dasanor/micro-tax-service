@@ -11,7 +11,7 @@ function opFactory(base) {
   const productListURI = base.config.get('services:uris:product.list');
   const op = {
     validator: {
-      schema: require(base.config.get('schemas:updateTax')),
+      schema: base.utils.loadModule('schemas:updateTax')
     },
     handler: (msg, reply) => {
       let id = msg.id;

@@ -11,7 +11,7 @@ function opFactory(base) {
   const op = {
     name: 'tax.info',
     validator: {
-      schema: require(base.config.get('schemas:infoTax')),
+      schema: base.utils.loadModule('schemas:infoTax')
     },
     handler: ({id}, reply) => {
       console.log(id);

@@ -55,7 +55,7 @@ function opFactory(base) {
 
   const op = {
     validator: {
-      schema: require(base.config.get('schemas:cartTaxes'))
+      schema: base.utils.loadModule('schemas:cartTaxes')
     },
     handler: (cart, reply) => {
       // List unique product IDs
