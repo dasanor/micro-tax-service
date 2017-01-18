@@ -8,14 +8,14 @@
     }
   },
   "schemas": {
-    "cartTaxes": "./schemas/cartTaxesSchema",
-    "infoTax": "./schemas/infoTaxSchema",
-    "createTax": "./schemas/createTaxSchema",
-    "updateTax": "./schemas/updateTaxSchema",
-    "removeTax": "./schemas/removeTaxSchema"
+    "cartTaxes": "${servicePath}/operations/schemas/cartTaxesSchema",
+    "infoTax": "${servicePath}/operations/schemas/infoTaxSchema",
+    "createTax": "${servicePath}/operations/schemas/createTaxSchema",
+    "updateTax": "${servicePath}/operations/schemas/updateTaxSchema",
+    "removeTax": "${servicePath}/operations/schemas/removeTaxSchema"
   },
   "models": {
-    "Tax": "./models/taxModel"
+    "Tax": "${servicePath}/models/taxModel"
   },
   "taxes": {
     "defaultCode": "default",
